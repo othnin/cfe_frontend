@@ -14,11 +14,13 @@ const LOCAL_USERNAME_KEY = "username"
 export function AuthProvider({children}) {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [username, setUsername] = useState("")
+    const [mounted, setMounted] = useState(false)
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
     
     useEffect(()=>{
+        setMounted(true)
         const storedAuthStatus = localStorage.getItem(LOCAL_STORAGE_KEY)
         if (storedAuthStatus) {
             const storedAuthStatusInt = parseInt(storedAuthStatus)
@@ -65,6 +67,14 @@ export function AuthProvider({children}) {
         }
         router.replace(loginWithNextUrl)
     }
+    if (!mounted) {
+        return null;
+    }
+    
+    if (!mounted) {
+        return null;
+    }
+
     return <AuthContext.Provider value={{isAuthenticated, login, logout, loginRequiredRedirect, username}}>
         {children}
     </AuthContext.Provider>
