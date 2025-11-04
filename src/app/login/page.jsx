@@ -27,18 +27,21 @@ export default function Page() {
             body: jsonData
         }
         const response = await fetch(LOGIN_URL, requestOptions)
-        let data = {}
+        // Parse the response body once and reuse the result. Calling
+        // response.json() multiple times throws "Body has already been consumed".
+        let data = null
         try {
           data = await response.json()
         } catch (error) {
-          
+          // ignore parse errors; data will remain null
         }
-        // const data = await response.json()
+
         if (response.ok) {
             console.log("logged in")
             auth.login(data?.username)
         } else {
-          console.log(await response.json())
+          // show parsed JSON if available, otherwise fall back to status
+          console.log(data ?? { status: response.status, statusText: response.statusText })
         }
     }
   return (
